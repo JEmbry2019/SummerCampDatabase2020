@@ -1,1 +1,60 @@
+SAMPLE SQL CODE
+
+
+/* Create Tables */
+
+CREATE TABLE Campers(
+CamperId int PRIMARY KEY,
+FirstName varchar(100),
+LastName varchar(100)
+)
+
+
+CREATE TABLE Games(
+GameId int PRIMARY KEY,
+Title varchar(200)
+)
+
+
+CREATE TABLE CamperGames (
+	CamperID int FOREIGN KEY REFERENCES Campers(CamoerId),
+	GamesId int FOREIGN KEY REFERENCES Games(GamesId)
+	CONSTRAINT CamperToGames_pk PRIMARY KEY (CamperId, GamesId),
+
+)
+
+/* INSERT VALUES */
+
+INSERT INTO Authors(AuthorId, FirstName, LastName)
+VALUES 
+	(1, 'Road', 'Runner'),
+	(2, 'WileE', 'Coyote'),
+	(3, 'Bugs', 'Bunny')
+
+INSERT INTO Books(BooksId, Title)
+VALUES 
+	(001, 'Run for the Money'),
+	(002, 'Two for the Show'),
+	(003, 'Three to get Ready')
+
+INSERT INTO AuthorToBooks (AuthorId, BooksId)
+VALUES 
+	(1,001),
+	(1, 002),
+	(2, 001),
+	(2, 002),
+	(3, 003)
+
+
+/* Display AuthorToBooks Table */
+
+
+SELECT AuthorId, BooksId
+FROM AuthorToBooks
+
+
+
+
+
+DROP TABLE AuthorToBooks;
 SQL Code
