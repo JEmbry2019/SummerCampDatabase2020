@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "SummerCampDatabase2020/1.0.0": {
+        "runtime": {
+          "SummerCampDatabase2020.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "SummerCampDatabase2020/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

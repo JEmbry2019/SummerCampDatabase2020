@@ -1,13 +1,36 @@
-SAMPLE SQL CODE
+/* SAMPLE SQL CODE */
 
 
 /* Create Tables */
-
-CREATE TABLE Campers(
+/* Camper NAme and Contact info */
+CREATE TABLE Camper(
 CamperId int PRIMARY KEY,
-FirstName varchar(100),
-LastName varchar(100)
+FirstName VARCHAR(100) NOT NULL,
+LastName VARCHAR(100) NOT NULL,
+Grade VARCHAR (20) NOT NULL,
+CellPhoneNumber VARCHAR(25) ,
+StreetAddress VARCHAR(50),
+City VARCHAR(50),
+[State] VARCHAR(25),
+ZipCode VARCHAR(10),
 )
+
+/* Camper Guardian / Parent Contact info */
+CREATE TABLE Guardian(
+GuardianId int PRIMARY KEY,
+CamperId int FOREIGN KEY REFERENCES Camper(CamperId),
+CamperName VARCHAR (100),
+Prefix VARCHAR (25),
+FirstName VARCHAR(100) NOT NULL,
+LastName VARCHAR (100) NOT NULL,
+PrimaryphoneNumber VARCHAR(25) NOT NULL,
+CellPhoneNumber VARCHAR(25) NOT NULL,
+StreetAddress VARCHAR(50) NOT NULL,
+City VARCHAR(50) NOT NULL,
+[State] VARCHAR(25) NOT NULL,
+ZipCode VARCHAR(10) NOT NULL,
+)
+
 
 
 CREATE TABLE Games(
@@ -23,7 +46,9 @@ CREATE TABLE CamperGames (
 
 )
 
-/* INSERT VALUES */
+
+
+/* INSERT VALUES 
 
 INSERT INTO Authors(AuthorId, FirstName, LastName)
 VALUES 
@@ -58,3 +83,5 @@ FROM AuthorToBooks
 
 DROP TABLE AuthorToBooks;
 SQL Code
+
+*/
