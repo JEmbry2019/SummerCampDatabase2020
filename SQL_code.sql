@@ -80,8 +80,85 @@ FROM Guardians
 JOIN Camper_Guardians 
 ON  Guardians.GuardianId = Camper_Guardians.GuardianId
 
+-- CREATE DATABASE--
+/*
+CREATE DATABASE SummerCampOct26;
+GO
+USE SummerCampOct26
+*/
 
----Emergency Contact MANY to MANY ---
+/* Create Tables */
+/* Camper Name and Contact info */
+DROP TABLE IF EXISTS Campers
+
+CREATE TABLE Campers(
+CamperId int PRIMARY KEY,
+FirstName VARCHAR(100) NOT NULL,
+LastName VARCHAR(100) NOT NULL,
+Grade VARCHAR (20) NOT NULL,
+CellPhoneNumber VARCHAR(25) ,
+StreetAddress VARCHAR(50),
+City VARCHAR(50),
+[State] VARCHAR(25),
+ZipCode VARCHAR(10),
+)
+
+/* Camper Guardians / Parent Contact info */
+
+DROP TABLE IF EXISTS Guardians
+
+CREATE TABLE Guardians(
+GuardianId int PRIMARY KEY,
+CamperId int FOREIGN KEY REFERENCES Campers(CamperId),
+CamperName VARCHAR (100),
+Allergy Bit NOT NULL,
+Relationship VARCHAR (25),
+FirstName VARCHAR(100) NOT NULL,
+LastName VARCHAR (100) NOT NULL,
+PrimaryphoneNumber VARCHAR(25) NOT NULL,
+CellPhoneNumber VARCHAR(25),
+StreetAddress VARCHAR(50) NOT NULL,
+City VARCHAR(50) NOT NULL,
+[State] VARCHAR(25) NOT NULL,
+ZipCode VARCHAR(10) NOT NULL, 
+EnroleDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+
+)
+
+INSERT INTO Campers(CamperId,FirstName, LastName, Grade, CellPhoneNumber, StreetAddress, City, [State], ZipCode)
+VALUES
+	(1, 'Bob', 'Smith', '6', '(502) 667-2222', 'Some Street', 'Lou', 'KY', '40233'),
+	(2, 'Sam', 'Jones', '7', '(502) 777-2222', 'Some Other Street', 'Lou', 'KY', '40244')
+
+INSERT INTO Campers(CamperId,FirstName, LastName, Grade, CellPhoneNumber, StreetAddress, City, [State], ZipCode)
+VALUES
+	(3, 'Trey', 'Thomas', '8', '(502) 887-2222', 'Somelittle Street', 'Lou', 'KY', '40233')
+
+
+
+INSERT INTO Guardians(GuardianId, CamperId, CamperName, Allergy, Relationship, FirstName, LastName, PrimaryphoneNumber, CellPhoneNumber, 
+StreetAddress, City, [State], ZipCode) 
+
+VALUES
+	(10, 1, 'Bob',1, 'Father.', 'John', 'Smith', '(502) 222-2222', '(502) 333-3333', 'Some Street', 'Lou', 'KY', '40233'),
+	(11, 1, 'Bob',1, 'Mom.', 'Jane', 'Smith', '(502) 222-2222', '(502) 303-3030', 'Some Street', 'Lou', 'KY', '40233'),
+	(20, 2, 'Sam',0, 'Father.', 'Jim', 'Jones', '(502) 444-2222', '(502) 555-3333', 'Some Other Street', 'Lou', 'KY', '40244')
+
+
+INSERT INTO Guardians(GuardianId, CamperId, CamperName, Allergy, Relationship, FirstName, LastName, PrimaryphoneNumber, CellPhoneNumber, 
+StreetAddress, City, [State], ZipCode)
+VALUES (11, 1, 'Bob',1, 'Mom', 'Jane', 'Smith', '(502) 222-2222', '(502) 303-3030', 'Some Street', 'Lou', 'KY', '40233')
+
+Select *
+FROM Campers
+
+
+Select *
+FROM Guardians
+
+
+
+---Guardian Contact MANY to MANY ---
 DROP TABLE IF EXISTS Camper_Guardians
 
 CREATE TABLE Camper_Guardians (
@@ -92,12 +169,15 @@ CREATE TABLE Camper_Guardians (
 
 INSERT INTO Camper_Guardians 
 VALUES 
-	(1, 007),
-	(2, 008),
-	(1, 077)
+	(1, 10),
+	(2, 20),
+	(1, 11)
 
 SELECT *
 FROM Camper_Guardians
+
+
+
 
 --Emergency Contact --
 SELECT Camper_Guardians.CamperID, CamperName, Guardians.GuardianId,FirstName, LastName, PrimaryphoneNumber, CellPhoneNumber 
@@ -105,9 +185,35 @@ FROM Guardians
 JOIN Camper_Guardians 
 ON  Guardians.GuardianId = Camper_Guardians.GuardianId
 
+-- ************************************************************************************--
+--Allergy Table using a WHERE CLAUSE--
+
+DROP  TABLE IF EXISTS AllergyTable
+
+SELECT  CamperName, CamperId, Allergy, Relationship, FirstName, LastName, PrimaryphoneNumber, CellPhoneNumber 
+INTO AllgeryTable 
+	
+FROM Guardians
+  
+WHERE Allergy = '1'
+	
+SELECT CamperName, CamperId, Allergy, Relationship, FirstName, LastName, PrimaryphoneNumber, CellPhoneNumber 
+FROM AllgeryTable
+
+--RIGHT JOIN AllergyTable and Campers Table--
+
+SELECT
+	
+	a.Allergy, a.FirstName, a.LastName, a.PrimaryphoneNumber, a.cellPhoneNumber,
+	c.CamperId, c.FirstName, c.LastName
+FROM
+	AllgeryTable a
+	RIGHT JOIN Campers c
+		ON c.CamperId = a.CamperId 
 
 
 
+-- ******************************************************************************************************--
 
 DROP TABLE IF EXISTS Games
 
@@ -150,12 +256,38 @@ VALUES
 SELECT *
 FROM CamperGames
 
+--Enrollment List--
+
+SELECT Camper_Guardians.CamperID, CamperName, Guardians.GuardianId,FirstName, LastName, PrimaryphoneNumber, CellPhoneNumber 
+FROM Guardians
+JOIN Camper_Guardians 
+ON  Guardians.GuardianId = Camper_Guardians.GuardianId
+
+
+
+--*************************************************************************************--
+DROP TABLE IF EXISTS Counselors
 
 CREATE TABLE Counselors (
 	CounselorId int PRIMARY KEY,
+	GradeLevel VARCHAR(10),
 	FirstName VARCHAR(240) NOT NULL,
 	LastName VARCHAR(240) NOT NULL,
+
 	)
+
+INSERT INTO Counselors
+VALUES 
+	(600, 6, 'Billy', 'Basketballer'),
+	(700, 7, 'Freddy', 'Footballer'),
+	(800, 8, 'Connie','Compute')
+
+Select *
+FROM Counselors
+
+
+
+
 /*  ----- Notes   ------   
 /*  ----- Notes   ------   
 
