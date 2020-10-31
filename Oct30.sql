@@ -54,6 +54,14 @@ CREATE TABLE Counselors (
 
 )
 
+DROP TABLE IF EXISTS CPR_Training
+
+CREATE TABLE CPR_Training (
+	CPR_Id int PRIMARY KEY,
+	CampCounselorId INT
+
+)
+
 
 DROP TABLE IF EXISTS Games
 
@@ -244,18 +252,18 @@ FROM Counselors
 INSERT INTO Meals(MealId, MealType, Cafeteria)
 VALUES
 	(0, 'Standard', 'Cafe1'),
-	(1, 'Veggie', 'Cafe2')	
+	(1, 'Veggie', 'Cafe2')
 
 SELECT *
 FROM Meals
 
 INSERT INTO Camper_Meals
-	VALUES
+VALUES
 	
 	(1, 1),
-	(2, 0),
+	
 	(3, 1),
-	(4, 1),
+
 	(5, 0),
 	(6, 0),
 	(7, 1),
@@ -283,15 +291,47 @@ SELECT *
 FROM Camper_Meals
 
 
+---Insert Data ---
+INSERT INTO CPR_Training (CampCounselorId, CPR_Id)
+VALUES
+	(6001, 1),
+	
+	(6003, 3),
+	(7001, 4),
+	
+	(7003, 5),
+	(8001, 6),
+	
+	(8003, 8)
+
+Select *
+FROM CPR_Training
+
+---------------------------------------------------------------- JOINS ---
+
+--JOINS Counselor and Games by Grade Level --
+SELECT  c.FirstName, c.LastName, c.GradeLevel, g.Title
+FROM Counselors c
+JOIN Games g
+ON c.GradeLevel = g.Grade
+
+
+
+--Counselors without CPR Training----
+SELECT c.FirstName, c.LastName, cpr.CPR_Id
+FROM Counselors c
+LEFT JOIN CPR_Training cpr
+ON cpr.CampCounselorId = c.CounselorId
+WHERE cpr.CampCounselorId IS NULL
 
 -- Join 3 Tables Campers, Camper_Meals, Meals --
-Select c.FirstName, c.LastName, m.MealType, Cafeteria
+Select c.FirstName, c.LastName, m.MealType, m.Cafeteria
 FROM Campers c
 LEFT JOIN Camper_Meals cm 
 ON c.CamperId = cm.CamperId
 LEFT JOIN Meals m
 ON m.MealId = cm.MealId
-Order by  m.MealId
+Order by  m.MealId, c.LastName
 
 
 
