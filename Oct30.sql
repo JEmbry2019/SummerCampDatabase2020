@@ -1,11 +1,12 @@
 -- CREATE DATABASE--
+-- CREATE DATABASE--
 
 CREATE DATABASE SummerCampOct30;
 GO
 USE SummerCampOct30
 
 
-/* Create Tables */
+/******************************************************   Create Tables   ******************************************************/
 /* Camper, Guardian, Games, Counselors */
 
 DROP TABLE IF EXISTS Campers
@@ -58,7 +59,9 @@ DROP TABLE IF EXISTS CPR_Training
 
 CREATE TABLE CPR_Training (
 	CPR_Id int PRIMARY KEY,
-	CampCounselorId INT
+	CampCounselorId  int NOT NULL,
+	CONSTRAINT fk_CampCounselor FOREIGN KEY (CampCounselorId)
+	REFERENCES Counselors(CounselorId)
 
 )
 
@@ -104,8 +107,9 @@ From Camper_Meals
 
 
 
--- Insert Data --
+/*************************************************************   Insert Data    **************************************************/
 
+--  CAMPERS TABLE  --
 INSERT INTO Campers(CamperId,FirstName, LastName, Grade, Allergy)
 VALUES
 	(1, 'Bob', 'Smith', '6', 1),
@@ -138,6 +142,8 @@ VALUES
 SELECT *
 FROM Campers
 
+
+--  GUARDIANS TABLE  --
 INSERT INTO Guardians(GuardianId, FirstName, LastName, Relationship, PrimaryphoneNumber)
 
 VALUES
@@ -170,8 +176,8 @@ VALUES
 SELECT *
 FROM Guardians
 
----Campers Guardians Bridge Table MANY to MANY ---
 
+---Campers Guardians Bridge Table MANY to MANY ---
 INSERT INTO Camper_Guardians(CamperID, GuardianId)
 VALUES
 	(1, 100),
@@ -213,6 +219,7 @@ VALUES
 SELECT *	
 FROM Camper_Guardians
 
+--  GAMES TABLE  --
 INSERT INTO Games(GameId, Title, Grade, [Location])
 VALUES
 	(1, 'BBall','6', 'Gym1'),
@@ -228,9 +235,7 @@ VALUES
 SELECT *
 FROM Games
 
--- Insert Data ******************************* --
-
-
+--  COUNSELORS TABLE  --
 INSERT INTO Counselors (CounselorId, GradeLevel, FirstName, LastName )
 VALUES
 	(6001, '6', 'Zane', 'Shaul'),
@@ -241,14 +246,14 @@ VALUES
 	(7003, '7', 'Worthington', 'Moyes'),
 	(8001, '8', 'Valma', 'Durham'),
 	(8002, '8', 'Isidora', 'Mosson'),
-	(8003, '8', 'Guillaume', 'Beedle')
+	(8003, '8', 'Guillaume', 'Beedle'),
+	(9001, '9', 'Addam', 'Apple')
 	
 
 Select *
 FROM Counselors
 
--- Insert Data ******************************* --
-
+--  MEALS TABLE  --
 INSERT INTO Meals(MealId, MealType, Cafeteria)
 VALUES
 	(0, 'Standard', 'Cafe1'),
@@ -257,6 +262,7 @@ VALUES
 SELECT *
 FROM Meals
 
+--  CAMPERS_MEALS TABLE  --
 INSERT INTO Camper_Meals
 VALUES
 	
@@ -291,7 +297,7 @@ SELECT *
 FROM Camper_Meals
 
 
----Insert Data ---
+--  CPR_TRAINING TABLE  --
 INSERT INTO CPR_Training (CampCounselorId, CPR_Id)
 VALUES
 	(6001, 1),
@@ -302,12 +308,14 @@ VALUES
 	(7003, 5),
 	(8001, 6),
 	
-	(8003, 8)
+	(8003, 8),
+
+	(9001, 9)
 
 Select *
 FROM CPR_Training
 
----------------------------------------------------------------- JOINS ---
+/*************************************************************** JOINS *******************************************/
 
 --JOINS Counselor and Games by Grade Level --
 SELECT  c.FirstName, c.LastName, c.GradeLevel, g.Title
@@ -332,6 +340,33 @@ ON c.CamperId = cm.CamperId
 LEFT JOIN Meals m
 ON m.MealId = cm.MealId
 Order by  m.MealId, c.LastName
+
+
+
+
+--DELETE ROW that another Table References during a Transaction.---
+
+/*
+INSERT INTO Counselors (CounselorId, GradeLevel, FirstName, LastName )
+VALUES
+(9001, '9', 'Adam', 'Apple')
+
+INSERT INTO CPR_Training (CampCounselorId, CPR_Id)
+VALUES
+	
+	(9001, 9)
+
+*/
+BEGIN TRANSACTION 
+  
+	DELETE FROM CPR_Training
+	WHERE CampCounselorId = 9001
+
+
+	DELETE FROM Counselors
+	WHERE CounselorId = 9001
+  
+COMMIT;
 
 
 
