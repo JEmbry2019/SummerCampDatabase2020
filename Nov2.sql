@@ -170,11 +170,11 @@ VALUES
 	(113, 'Cosmo', 'Long', 'Father', '(390) 331-8156'),
 	(114, 'Tybi', 'Long', 'Mother', '(859) 689-1047'),
 
-	(115, 'Marvin', 'Snell', 'Father', '(317) 133-3130'),
+	(115, 'Marvin', 'Snell', 'Grandparent', '(317) 133-3130'),
 	(116, 'Calvin', 'Prdie', 'Father', '(390) 131-8156'),
-	(117, 'Graace', 'Sturdgess', 'Mother', '(859) 669-1047'),
+	(117, 'Graace', 'Sturdgess', 'Grandparent', '(859) 669-1047'),
 	(118, 'James', 'Askaw', 'Father', '(502) 222-8877'),
-	(119, 'Sara', 'Strong', 'Mother', '(502) 999-8877'),
+	(119, 'Sara', 'Strong', 'Grandparent', '(502) 999-8877'),
 	(120, 'Lilly', 'Payfoot', 'Mother', '(303) 987-8967'),
 	(121, 'Sam', 'Payfoot', 'Father', '(303) 987-8967')
 	
@@ -334,33 +334,8 @@ VALUES
 Select *
 FROM CPR_Training
 
-/*************************************************************** JOINS *******************************************/
 
---JOINS Counselor and Games by Grade Level --
-SELECT  c.FirstName, c.LastName, c.GradeLevel, g.Title
-FROM Counselors c
-JOIN Games g
-ON c.GradeLevel = g.Grade
-
-
-
---  LEFT JOIN Counselors NO CPR Training----
-SELECT c.FirstName, c.LastName, cpr.CPR_Id
-FROM Counselors c
-LEFT JOIN CPR_Training cpr
-ON cpr.CampCounselorId = c.CounselorId
-WHERE cpr.CampCounselorId IS NULL
-
--- Join 3 Tables Campers, Camper_Meals, Meals --
-Select c.FirstName, c.LastName, m.MealType, m.Cafeteria
-FROM Campers c
-LEFT JOIN Camper_Meals cm 
-ON c.CamperId = cm.CamperId
-LEFT JOIN Meals m
-ON m.MealId = cm.MealId
-Order by  m.MealId, c.LastName
-
-/************************************************************* SELECT Statemrnts  ******************************************/
+/************************************************************* SELECT Statements  ******************************************/
 
 -- SELECT using a WHERE CLAUSE --
 
@@ -379,6 +354,7 @@ WHERE (Grade = 7 OR Grade = 8) AND Age > 12
 SELECT *
 FROM CPR_Training
 WHERE LevelTwo IS NOT NULL
+
 
 
 /************************************************************  DML Statements  *********************************************/
@@ -430,7 +406,43 @@ COMMIT;
 
 
 
+/*************************************************************** JOINS *******************************************/
 
+--JOINS Counselor and Games by Grade Level --
+SELECT  c.FirstName, c.LastName, c.GradeLevel, g.Title
+FROM Counselors c
+JOIN Games g
+ON c.GradeLevel = g.Grade
+
+
+
+--  LEFT JOIN Counselors NO CPR Training----
+SELECT c.FirstName, c.LastName, cpr.CPR_Id
+FROM Counselors c
+LEFT JOIN CPR_Training cpr
+ON cpr.CampCounselorId = c.CounselorId
+WHERE cpr.CampCounselorId IS NULL
+
+-- Join 3 Tables Campers, Camper_Meals, Meals --
+Select c.FirstName, c.LastName, m.MealType, m.Cafeteria
+FROM Campers c
+LEFT JOIN Camper_Meals cm 
+ON c.CamperId = cm.CamperId
+LEFT JOIN Meals m
+ON m.MealId = cm.MealId
+Order by  m.MealId, c.LastName
+
+
+/*******************************************************  More Selects  *******************************************/
+
+-- SELECT Query utilizes a VARIABLE in the WHERE clause --
+--and--
+-- SELECT Query utilizes an ORDER BY clause --
+DECLARE @grands varchar(25) = 'Grandparent'
+SELECT * 
+FROM Guardians
+WHERE Relationship = 'Grandparent'
+ORDER BY FirstName
 
 
 
