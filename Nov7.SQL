@@ -455,7 +455,7 @@ GROUP BY AGE
   FROM Campers
   WHERE HasAllergy > 0
 
--- SELECT Query utilizes a Calculated Field (concatenat) --
+-- SELECT Query utilizes a SUBQUERY --
 
 SELECT FirstName, LastName, SalaryPerHr
 FROM Counselors
