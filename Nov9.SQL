@@ -483,3 +483,14 @@ ORDER BY c.LastName, c.FirstName
 
 
 */
+GROUP BY EXAMPLE
+
+Select AVG(c.Age), c.Grade
+FROM Campers c
+LEFT JOIN Camper_Guardians cg 
+ON c.CamperId = cg.CamperId
+
+Right JOIN Guardians g
+On cg.GuardianId = g.GuardianId
+
+GROUP BY c.Grade 
