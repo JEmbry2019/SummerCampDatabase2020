@@ -1,5 +1,4 @@
 -- CREATE DATABASE--
--- CREATE DATABASE--
 
 
 CREATE DATABASE SummerCampNov16;
@@ -384,6 +383,7 @@ UPDATE Guardians
 --DELETE ROW that another Table References during a Transaction.---
 
 /*
+Deleted Code
 INSERT INTO Counselors (CounselorId, GradeLevel, FirstName, LastName )
 VALUES
 (9001, '9', 'Adam', 'Apple')
@@ -412,7 +412,7 @@ COMMIT;
 
 /*************************************************************** JOINS *******************************************/
 
---JOINS Counselor and Games by Grade Level --(Index Above)
+--JOINS Counselor and Games by Grade Level --
 
 SELECT  c.FirstName, c.LastName, c.GradeLevel, g.Title
 FROM Counselors c
@@ -471,7 +471,7 @@ FROM Campers
 GROUP BY AGE 
 
 
--- SELECT Query utilizes a Calculated Field (concatenat) --
+-- SELECT Query utilizes a Calculated Field (concatenate) --
  SELECT FirstName +' ' +  LastName + ' has an allergy!'
   FROM Campers
   WHERE HasAllergy > 0
@@ -525,83 +525,3 @@ ON cg.GuardianId= g.GuardianId
 GROUP BY c.FirstName,  c.LastName
 HAVING COUNT(cg.guardianID) > 0 AND Max(c.Age) < 15
 
-
--- *****************************************************--
-
---EXAMPLE
-
-
-Select AVG(c.Age), c.Grade
-FROM Campers c
-LEFT JOIN Camper_Guardians cg 
-ON c.CamperId = cg.CamperId
-
-Right JOIN Guardians g
-On cg.GuardianId = g.GuardianId
-
-GROUP BY c.Grade 
-
-
--- *****************************************************--
-
--- J --
-
-
-Select AVG(c.Age), c.Grade
-FROM Campers c
-
-
-LEFT JOIN Camper_Guardians cg 
-ON c.CamperId = cg.CamperId
-
-Right JOIN Guardians g
-On cg.GuardianId = g.GuardianId
-
-
-Group by c.Grade
-
-/*
-SELECT c.*, g.*
-FROM Campers c
-JOIN Camper_Guardians cg
-ON c.CamperId = cg.CamperID
-JOIN Guardians g
-ON cg.GuardianId= g.GuardianId 
-WHERE g.PrimaryphoneNumber like '(602%'
-GROUP BY cg.GuardianId
-*/
-
-
-SELECT COUNT(cg.guardianID) AS NumGuardians,  c.FirstName, c.LastName, MAX(c.Age) AS Age, MAX(g.PrimaryphoneNumber) AS PrimaryNumber
-FROM Campers c
-FULL JOIN Camper_Guardians cg
-ON c.CamperId = cg.CamperID
-FULL JOIN Guardians g
-ON cg.GuardianId= g.GuardianId 
-GROUP BY c.FirstName,  c.LastName
-HAVING COUNT(cg.guardianID) > 0 AND Max(c.Age) < 15
-
-/*
- COUNT(cg.guardianID), c.FirstName, 
-  
-
-************
-SELECT COUNT(cg.guardianID)
-FROM Campers c
-JOIN Camper_Guardians cg
-ON c.CamperId = cg.CamperID
-JOIN Guardians g
-ON cg.GuardianId= g.GuardianId 
-
-GROUP BY cg.GuardianId
-HAVING COUNT(cg.GuardianId) > 1
-*******************
-
-
-SELECT COUNT(CustomerID), Country
-FROM Customers
-GROUP BY Country
-HAVING COUNT(CustomerID) > 5
-ORDER BY COUNT(CustomerID) DESC;
-
-*/
