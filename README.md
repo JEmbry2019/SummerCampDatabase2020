@@ -2,7 +2,9 @@
 
 # Code Louisville SQL Server project Fall 2020
 
-All SQL code is located in the Nov16 File.  Copy the code into SSMS or a similiar environment run the code.<br>
+All SQL code is located in the Nov16 File.<br>
+Copy the code into SSMS or a similiar environment<br>
+Run the code.<br>
 
 # Section 1
 The Project consists of 8 tables:<br>
@@ -16,10 +18,11 @@ Meals<br>
 Camper_Meals (a bridging table)<br>
 
 # Section 2
-Data add to the tables with INSERT INTO. VALUES , then a SELECT statement is called.<br>
+Data add to the tables with INSERT INTO,  VALUES , then a SELECT statement is called.<br>
 
 # Section 3
-The following requirments are added:<br>
+    The following requirments are added: <br>
+    
 --SELECT Statements--<br>
 SELECT using a WHERE CLAUSE<br>
 SELECT using an OR and an AND OPERATOR<br>
