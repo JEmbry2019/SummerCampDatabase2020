@@ -1,10 +1,11 @@
 -- CREATE DATABASE--
+-- CREATE DATABASE--
 
-/*
-CREATE DATABASE SummerCampNov11;
+
+CREATE DATABASE SummerCampNov16;
 GO
-USE SummerCampNov11
-*/
+USE SummerCampNov16
+
 /******************************************************   Create Tables   ******************************************************/
 /* Camper, Guardian, Games, Counselors */
 
@@ -262,9 +263,9 @@ VALUES
 	(8003, 9, 'Computer', '8', 'Lab3', 40),
 
 -- 9th Grade --
-	(9001, 10, 'BBall', '9', 'Gym3', 30),
-	(9002, 11, 'BaseBall', '9', 'Lab3', 35),
-	(9003, 12, 'VBall', '9', 'Lab3', 40),
+	(9001, 10, 'BBall', '9', 'Gym4', 30),
+	(9002, 11, 'BaseBall', '9', 'Lab4', 35),
+	(9003, 12, 'VBall', '9', 'Lab4', 40),
 
 -- Extra programs --
 	(6001, 13, 'ART1','6', 'Cafe1', 20),
@@ -411,20 +412,29 @@ COMMIT;
 
 /*************************************************************** JOINS *******************************************/
 
---JOINS Counselor and Games by Grade Level --
+--JOINS Counselor and Games by Grade Level --(Index Above)
+
 SELECT  c.FirstName, c.LastName, c.GradeLevel, g.Title
 FROM Counselors c
 JOIN Games g
 ON c.GradeLevel = g.Grade
 
+---Design a NONCLUSTERED INDEX with ONE KEY COLUMN that improves the performance on LEFT JOIN Counselors NO CPR Training--------------
 
+CREATE NONCLUSTERED INDEX IX_CPRID
+ON CPR_Training
+(
+CPR_ID
 
+)
 --  LEFT JOIN Counselors NO CPR Training----
 SELECT c.FirstName, c.LastName, cpr.CPR_Id
 FROM Counselors c
 LEFT JOIN CPR_Training cpr
 ON cpr.CampCounselorId = c.CounselorId
 WHERE cpr.CampCounselorId IS NULL
+
+
 
 -- Join 3 Tables Campers, Camper_Meals, Meals --
 Select c.FirstName, c.LastName, m.MealType, m.Cafeteria
@@ -439,13 +449,20 @@ Order by  m.MealId, c.LastName
 /*******************************************************  More Selects  *******************************************/
 
 -- SELECT Query utilizes a VARIABLE in the WHERE clause --
---and--
--- SELECT Query utilizes an ORDER BY clause --
+
 DECLARE @grands varchar(25) = 'Grandparent'
 SELECT * 
 FROM Guardians
 WHERE Relationship = 'Grandparent'
 ORDER BY LastName
+
+-- SELECT Query utilizes an ORDER BY clause --
+
+SELECT FirstName, LastName
+FROM Campers
+Order By  LastName, FirstName
+
+
 
 -- SELECT Query utilizes an GROUP BY Aggregate Function (COUNT() ) --
 SELECT AGE, COUNT(*) AS Total
@@ -459,9 +476,19 @@ GROUP BY AGE
   FROM Campers
   WHERE HasAllergy > 0
 
+
 -- SELECT Query utilizes a Subquery --
 
-SELECT FirstName, LastName, SalaryPerHr
+---Design a NONCLUSTERED INDEX with TWO KEY COLUMNS that improves the performance of the AVG Salary Per Hour query------------------
+
+CREATE NONCLUSTERED INDEX IX_Counselors_Salary_Per_Hour
+ON Counselors
+(
+SalaryPerHr,
+LastName
+)
+
+SELECT LastName, FirstName, SalaryPerHr
 FROM Counselors
   WHERE SalaryPerHr > (
       SELECT AVG(SalaryPerHr) 
@@ -469,8 +496,7 @@ FROM Counselors
 
 	   )
 
-
--- SELECT Query utilizes a Join , 2 Operators, and a GROUP BY with an Aggregate --
+--SELECT Query utilizes a Join , 2 Operators, and a GROUP BY with an Aggregate --
 
 SELECT AVG(g.HoursWorked) AS AverageHours, c.GradeLevel
 FROM Games g
@@ -479,6 +505,25 @@ ON g.GameCounselorId = c.CounselorId
 WHERE c.GradeLevel < 11 AND g.HoursWorked > 5
 GROUP BY c.GradeLevel
 
+
+-- SELECT Query utilizes a Join with 3 Tables, 2 Operators, and a GROUP BY with an Aggregate and a HAVING Clause --
+---Design a NONCLUSTERED INDEX with at least 1 KEY COLUMN and 1 INCLUDE COLUMN that improves the performance of a query------------------
+
+CREATE NONCLUSTERED INDEX IX_NumGuardian_CamperAge
+ON Campers
+(
+Age
+)
+INCLUDE (LastName);
+
+SELECT COUNT(cg.guardianID) AS NumGuardians,  c.FirstName, c.LastName, MAX(c.Age) AS Age, MAX(g.PrimaryphoneNumber) AS PrimaryNumber
+FROM Campers c
+FULL JOIN Camper_Guardians cg
+ON c.CamperId = cg.CamperID
+FULL JOIN Guardians g
+ON cg.GuardianId= g.GuardianId 
+GROUP BY c.FirstName,  c.LastName
+HAVING COUNT(cg.guardianID) > 0 AND Max(c.Age) < 15
 
 
 -- *****************************************************--
@@ -527,18 +572,18 @@ GROUP BY cg.GuardianId
 */
 
 
-SELECT COUNT(cg.guardianID) AS NumGuardians, c.FirstName, c.LastName, MAX(c.Age) AS Age, MAX(g.PrimaryphoneNumber) AS PrimaryNumber
+SELECT COUNT(cg.guardianID) AS NumGuardians,  c.FirstName, c.LastName, MAX(c.Age) AS Age, MAX(g.PrimaryphoneNumber) AS PrimaryNumber
 FROM Campers c
 FULL JOIN Camper_Guardians cg
 ON c.CamperId = cg.CamperID
 FULL JOIN Guardians g
 ON cg.GuardianId= g.GuardianId 
-GROUP BY  c.FirstName, c.LastName
+GROUP BY c.FirstName,  c.LastName
 HAVING COUNT(cg.guardianID) > 0 AND Max(c.Age) < 15
 
-
 /*
- 
+ COUNT(cg.guardianID), c.FirstName, 
+  
 
 ************
 SELECT COUNT(cg.guardianID)
