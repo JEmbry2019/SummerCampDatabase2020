@@ -6,7 +6,7 @@ GO
 USE SummerCampNov16
 
 /******************************************************   Create Tables   ******************************************************/
-/* Camper, Guardian, Games, Counselors */
+/* Campers, Guardians, Camper_Guardians, Counselors, CPR_Training, Games, Meals, Camper_Meals  */
 
 DROP TABLE IF EXISTS Campers
 
@@ -390,9 +390,7 @@ VALUES
 
 INSERT INTO CPR_Training (CampCounselorId, CPR_Id)
 VALUES
-	
 	(9001, 9)
-
 */
 BEGIN TRANSACTION 
   
@@ -404,10 +402,6 @@ BEGIN TRANSACTION
 	WHERE CounselorId = 9001
   
 COMMIT;
-
-
-
-
 
 
 /*************************************************************** JOINS *******************************************/
@@ -464,7 +458,7 @@ Order By  LastName, FirstName
 
 
 
--- SELECT Query utilizes an GROUP BY Aggregate Function (COUNT() ) --
+-- SELECT Query utilizes a GROUP BY and Aggregate Function (COUNT() ) --
 SELECT AGE, COUNT(*) AS Total
 FROM Campers
 
