@@ -365,7 +365,8 @@ WHERE LevelTwo IS NOT NULL
 DECLARE @gradeNum VARCHAR(25) = 9
 DELETE
 FROM Games
-WHERE @gradeNum = Grade
+WHERE Grade = @gradeNum
+--WHERE  @gradeNum = Grade  (Correction)
 
 SELECT *
 FROM Games
@@ -418,8 +419,8 @@ ON c.GradeLevel = g.Grade
 CREATE NONCLUSTERED INDEX IX_CPRID
 ON CPR_Training
 (
-CPR_ID
-
+CampCounselorId
+--CPR_ID  (Correction)
 )
 --  LEFT JOIN Counselors NO CPR Training----
 SELECT c.FirstName, c.LastName, cpr.CPR_Id
@@ -447,7 +448,8 @@ Order by  m.MealId, c.LastName
 DECLARE @grands varchar(25) = 'Grandparent'
 SELECT * 
 FROM Guardians
-WHERE Relationship = 'Grandparent'
+WHERE Relationship = @grands  
+--WHERE Relationship = @grands (Correction made)
 ORDER BY LastName
 
 -- SELECT Query utilizes an ORDER BY clause --
